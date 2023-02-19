@@ -33,7 +33,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 /* LOWER
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |   `  |   !  |   @  |   #  |   $  |  %   |                    |   ^  |   &  |   *  |   -  |  =+  |  Del |
+ * |   `  |   !  |   @  |   #  |   $  |  %   |                    |   ^  |   &  |   *  |   ~  |   -  |  =+  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |      |      |      |      |      |                    |      |      |      |   {  |   }  |   |  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -46,7 +46,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                   `----------------------------'           '------''--------------------'
  */
 [_LOWER] = LAYOUT(
-  KC_GRV,  KC_EXLM, KC_AT,  KC_HASH, KC_DLR,  KC_PERC,                    KC_CIRC, KC_AMPR, KC_ASTR, KC_MINS, KC_EQL,  KC_DEL,
+  KC_GRV,  KC_EXLM, KC_AT,  KC_HASH, KC_DLR,  KC_PERC,                    KC_CIRC, KC_AMPR, KC_ASTR, KC_TILD, KC_MINS, KC_EQL,
   _______, _______, _______,_______, _______, _______,                    _______, _______, _______, KC_LCBR, KC_RCBR, KC_PIPE,
   _______, _______, _______,_______, _______, _______,                    _______, _______, _______, _______, KC_UP,   _______,
   KC_LSFT, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_RGHT,
@@ -54,7 +54,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 /* RAISE
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |   _  |   +  |      |
+ * |      |      |      |      |      |      |                    |      |      |      |   _  |   +  | Del  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |R_TOG |R_MOD |R_M_P |      |      |      |                    |      |      |      |   [  |   ]  |   \  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -68,7 +68,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 
 [_RAISE] = LAYOUT(
-  _______, _______, _______, _______, _______, _______,                     _______, _______, _______, KC_UNDS, KC_PLUS, _______,
+  _______, _______, _______, _______, _______, _______,                     _______, _______, _______, KC_UNDS, KC_PLUS, KC_DEL,
   RGB_TOG, RGB_MOD, RGB_M_P, _______, _______, _______,                     _______, _______, _______, KC_LBRC, KC_RBRC, KC_BSLS,
   KC_F1,  KC_F2,    KC_F3,   KC_F4,   KC_F5,   KC_F6,                       XXXXXXX, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,   _______, _______,  _______, _______, _______, _______, _______, _______,
@@ -148,4 +148,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // set_timelog();
   }
   return true;
+}
+
+bool encoder_update_user(uint8_t index, bool clockwise) {
+    if (index == 0) { /* First encoder */
+        if (clockwise) {
+            tap_code_delay(KC_VOLD, 10);
+        } else {
+            tap_code_delay(KC_VOLU, 10);
+        }
+    }
+    return false;
 }

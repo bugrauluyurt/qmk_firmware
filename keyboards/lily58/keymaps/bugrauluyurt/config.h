@@ -43,6 +43,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGBLIGHT_SAT_STEP 17
 #define RGBLIGHT_VAL_STEP 17
 
+#define ENCODERS_PAD_A { F5 } // Pro Micro pin on Out A
+#define ENCODERS_PAD_B { F4 } // Pro Micro pin on Out B
+#define ENCODER_RESOLUTION 4 // Pulses the encoder registers between each detent
+
 // Underglow
 /*
 #undef RGBLED_NUM
