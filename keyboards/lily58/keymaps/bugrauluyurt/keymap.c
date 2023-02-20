@@ -151,11 +151,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) { /* First encoder */
+    if (index == 1) { /* First encoder */
         if (clockwise) {
             tap_code_delay(KC_VOLD, 10);
         } else {
             tap_code_delay(KC_VOLU, 10);
+        }
+    } else if (index == 0) { /* Second encoder */
+        if (clockwise) {
+            tap_code(KC_DOWN);
+        } else {
+            tap_code(KC_UP);
         }
     }
     return false;
