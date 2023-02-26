@@ -31,17 +31,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TAPPING_FORCE_HOLD
 #define TAPPING_TERM 100
 
+// #undef RGB_DI_PIN
+// #define RGB_DI_PIN 25
 #undef RGBLED_NUM
-#define RGBLED_NUM 8
+#define RGBLED_NUM 14
 #undef RGBLED_SPLIT
-#define RGBLED_SPLIT {4, 4}
-
-#define RGBLIGHT_EFFECT_BREATHING
-
-#define RGBLIGHT_LIMIT_VAL 60
-#define RGBLIGHT_HUE_STEP 10
-#define RGBLIGHT_SAT_STEP 17
-#define RGBLIGHT_VAL_STEP 17
+#define RGBLED_SPLIT {7, 7}
+#define RGBLIGHT_SLEEP
 
 #define ENCODERS_PAD_A { F4 } // Master half pin Out A
 #define ENCODERS_PAD_B { F5 } // Master half pin Out B

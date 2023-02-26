@@ -33,11 +33,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 /* LOWER
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |   `  |   !  |   @  |   #  |   $  |  %   |                    |   ^  |   &  |   *  |   ~  |   -  |  =+  |
+ * |   `  |   ~  |   @  |   #  |   $  |  %   |                    |   ^  |   &  |   (  |   )  |   -  |  =+  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |      |      |      |   {  |   }  |   |  |
+ * |      |      |      |      |      |      |                    |      |   [  |   ]  |   {  |   }  |   |  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------.    ,-------|      |      |      |      |  Up  |      |
+ * |      |      |      |      |      |      |-------.    ,-------|      |      |   <  |   >  |  Up  |      |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |LShift|      |      |      |      |      |-------|    |-------|      |      |      | Left | Down | Right|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
@@ -46,17 +46,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                   `----------------------------'           '------''--------------------'
  */
 [_LOWER] = LAYOUT(
-  KC_GRV,  KC_EXLM, KC_AT,  KC_HASH, KC_DLR,  KC_PERC,                    KC_CIRC, KC_AMPR, KC_ASTR, KC_TILD, KC_MINS, KC_EQL,
-  _______, _______, _______,_______, _______, _______,                    _______, _______, _______, KC_LCBR, KC_RCBR, KC_PIPE,
-  _______, _______, _______,_______, _______, _______,                    _______, _______, _______, _______, KC_UP,   _______,
+  KC_GRV,  KC_TILD, KC_AT,  KC_HASH, KC_DLR,  KC_PERC,                    KC_CIRC, KC_AMPR, KC_LPRN, KC_RPRN, KC_MINS, KC_EQL,
+  _______, _______, _______,_______, _______, _______,                    _______, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, KC_PIPE,
+  _______, _______, _______,_______, _______, _______,                    _______, _______, KC_LT,   KC_GT,   KC_UP,   _______,
   KC_LSFT, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_RGHT,
-                             _______, _______, _______, _______, _______,  _______, _______, _______
+                             _______, _______, _______, KC_SPC,  KC_ENT,  _______, _______, _______
 ),
 /* RAISE
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |   _  |   +  | Del  |
+ * |RGB_VA|RGB_VA|RGB_HU|RGB_HU|      |      |                    |      |      |      |   _  |   +  | Del  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |R_TOG |R_MOD |R_M_P |      |      |      |                    |      |      |      |   [  |   ]  |   \  |
+ * |R_TOG |R_MOD |R_M_P |RGB_SA|RGB_SA|      |                    |      |      |      |   [  |   ]  |   \  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |-------.    ,-------|      | Left | Down |  Up  |Right |      |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
@@ -68,8 +68,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 
 [_RAISE] = LAYOUT(
-  _______, _______, _______, _______, _______, _______,                     _______, _______, _______, KC_UNDS, KC_PLUS, KC_DEL,
-  RGB_TOG, RGB_MOD, RGB_M_P, _______, _______, _______,                     _______, _______, _______, KC_LBRC, KC_RBRC, KC_BSLS,
+  RGB_VAI, RGB_VAD, RGB_HUI, RGB_HUD, _______, _______,                     _______, _______, _______, KC_UNDS, KC_PLUS, KC_DEL,
+  RGB_TOG, RGB_MOD, RGB_M_P, RGB_SAI, RGB_SAD, _______,                     _______, _______, _______, KC_LBRC, KC_RBRC, KC_BSLS,
   KC_F1,  KC_F2,    KC_F3,   KC_F4,   KC_F5,   KC_F6,                       XXXXXXX, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,   _______, _______,  _______, _______, _______, _______, _______, _______,
                              _______, _______, _______,  _______, _______,  _______, _______, _______
@@ -103,7 +103,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 //SSD1306 OLED update loop, make sure to enable OLED_ENABLE=yes in rules.mk
 #ifdef OLED_ENABLE
-
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
   if (!is_keyboard_master())
     return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
@@ -166,3 +165,17 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     }
     return false;
 }
+
+#ifdef RGBLIGHT_ENABLE
+void keyboard_post_init_user(void) {
+    // Initialize RGB to static black
+    rgblight_enable_noeeprom();
+    rgblight_sethsv_noeeprom(HSV_BLUE);
+    rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
+}
+
+// void housekeeping_task_user(void) {
+//     rgblight_setrgb_at(RGB_RED, 0);
+//     rgblight_setrgb_at(RGB_GREEN, 1);
+// }
+#endif
