@@ -14,6 +14,7 @@ SLEEP_LED_ENABLE = no
 SPLIT_KEYBOARD = yes
 EXTRAKEY_ENABLE = yes       # Audio control and System control
 ENCODER_ENABLE = yes        # Activate Encoder
+MOUSEKEY_ENABLE = yes		# Enable Mouse Keys
 
 # If you want to change the display of OLED, you need to change here
 SRC +=  ./lib/rgb_state_reader.c \

@@ -1,5 +1,10 @@
 #include QMK_KEYBOARD_H
 
+enum custom_keycodes {
+    D3_K3,
+    D3_KM1,
+};
+
 enum layer_number {
   _QWERTY = 0,
   _LOWER,
@@ -35,9 +40,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |   `  |   ~  |   @  |   #  |   $  |  %   |                    |   ^  |   &  |   (  |   )  |   -  |  =+  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |      |   [  |   ]  |   {  |   }  |   |  |
+ * |      |D3_K3 |D3_KM1|      |      |      |                    |      |   [  |   ]  |   {  |   }  |   |  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------.    ,-------|      |      |   <  |   >  |  Up  |      |
+ * |      |      |      |      |      |      |-------.    ,-------|      |      |   <  |   >  |  Up  |      |11111111111111111
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |LShift|      |      |      |      |      |-------|    |-------|      |      |      | Left | Down | Right|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
@@ -47,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_LOWER] = LAYOUT(
   KC_GRV,  KC_TILD, KC_AT,  KC_HASH, KC_DLR,  KC_PERC,                    KC_CIRC, KC_AMPR, KC_LPRN, KC_RPRN, KC_MINS, KC_EQL,
-  _______, _______, _______,_______, _______, _______,                    _______, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, KC_PIPE,
+  _______, D3_K3,   D3_KM1, _______, _______, _______,                    _______, KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, KC_PIPE,
   _______, _______, _______,_______, _______, _______,                    _______, _______, KC_LT,   KC_GT,   KC_UP,   _______,
   KC_LSFT, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_RGHT,
                              _______, _______, _______, KC_SPC,  KC_ENT,  _______, _______, _______
@@ -145,6 +150,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     set_keylog(keycode, record);
 #endif
     // set_timelog();
+  }
+  // Macros start here
+  switch (keycode) {
+  case D3_K3:
+    if (record->event.pressed) {
+        // when keycode D3_K3 is pressed
+        SEND_STRING(SS_TAP(X_Q) SS_TAP(X_W) SS_TAP(X_E));
+    } else {
+        // when keycode D3_K3 is released
+    }
+    break;
+  case D3_KM1:
+    if (record->event.pressed) {
+        // when keycode D3_KM1 is pressed
+        SEND_STRING(SS_TAP(X_BTN1));
+    } else {
+        // when keycode D3_KM1 is released
+    }
+    break;
   }
   return true;
 }
