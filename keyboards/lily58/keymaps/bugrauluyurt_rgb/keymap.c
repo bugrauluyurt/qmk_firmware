@@ -12,6 +12,9 @@ enum layer_number {
   _ADJUST,
 };
 
+bool is_alt_tab_active = false;
+uint16_t alt_tab_timer = 0;
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* QWERTY
@@ -181,13 +184,38 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
             tap_code_delay(KC_VOLU, 10);
         }
     } else if (index == 0) { /* Second encoder */
+        // @INFO: Comment in to enable media control
+        // if (clockwise) {
+        //     tap_code_delay(KC_MPRV, 10);
+        // } else {
+        //     tap_code_delay(KC_MNXT, 10);
+        // }
         if (clockwise) {
-            tap_code_delay(KC_MPRV, 10);
+            if (!is_alt_tab_active) {
+                is_alt_tab_active = true;
+                register_code(KC_LGUI);
+            }
+            alt_tab_timer = timer_read();
+            tap_code16(S(KC_TAB));
         } else {
-            tap_code_delay(KC_MNXT, 10);
+            if (!is_alt_tab_active) {
+                is_alt_tab_active = true;
+                register_code(KC_LGUI);
+            }
+            alt_tab_timer = timer_read();
+            tap_code16(KC_TAB);
         }
     }
     return false;
+}
+
+void matrix_scan_user(void) {
+  if (is_alt_tab_active) {
+    if (timer_elapsed(alt_tab_timer) > 1250) {
+      unregister_code(KC_LGUI);
+      is_alt_tab_active = false;
+    }
+  }
 }
 
 #ifdef RGBLIGHT_ENABLE
